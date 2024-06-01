@@ -1,0 +1,19 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import type { Session } from '@auth/core/types'
+
+interface Props {
+	session: Session
+}
+
+const { session } = Astro.props
+---
+
+<Layout title="">
+	<h1>Bienvenido</h1>
+
+	<figure>
+		<img src={session.user?.image} alt="Imagen de perfil" />
+	</figure>
+	<span>{session.user?.name}</span>
+</Layout>

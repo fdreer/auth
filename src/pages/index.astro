@@ -1,0 +1,57 @@
+---
+import { getSession } from 'auth-astro/server'
+import Layout from '../layouts/Layout.astro'
+import Twitch from '@/components/buttons/Twitch.astro'
+import Google from '@/components/buttons/Google.astro'
+import Welcome from '@/sections/Welcome.astro'
+
+const session = await getSession(Astro.request)
+---
+
+<Layout title="Autenticación OAuth">
+	<main>
+		<h1>Autenticación OAuth</h1>
+
+		{
+			!session && (
+				<section class="login-section">
+					<Twitch />
+					<Google />
+				</section>
+			)
+		}
+		{session && <Welcome session={session} />}
+		{session && <button id="logout">Cerrar sesión</button>}
+	</main>
+</Layout>
+
+<script>
+	import { $ } from '@/lib/dom-selector'
+
+	const { signOut } = await import('auth-astro/client')
+	const $logout = $('#logout')
+
+	if ($logout) $logout.onclick = () => signOut()
+</script>
+
+<style>
+	main {
+		width: 720px;
+		margin: 0 auto;
+		padding: 1rem;
+		color: white;
+		text-align: center;
+	}
+	h1 {
+		font-size: 2rem;
+		font-weight: 700;
+		text-align: center;
+	}
+	.login-section {
+		width: 300px;
+		display: flex;
+		flex-direction: column;
+		margin: 0 auto;
+		gap: 20px;
+	}
+</style>
